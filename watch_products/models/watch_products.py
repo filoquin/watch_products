@@ -61,11 +61,14 @@ class ProductWatchProducts(models.Model):
         if self.bulk_codes:
             codes = self.bulk_codes.splitlines()
             product_ids = self.env['product.template'].search(
-                [('barcode', 'in', codes)])
+                ['|', ('barcode', 'in', codes), ('default_code', 'in', codes)])
             new_products_ids = product_ids - self.product_ids
-            self.product_ids = [(4, x.id) for x in new_products_ids]
+            if len(new_products_ids):
+
+                self.product_ids = [(4, x.id) for x in new_products_ids]
+                self.bulk_codes = ''
+                return self.report_id.report_action(new_products_ids)
             self.bulk_codes = ''
-            return self.report_id.report_action(new_products_ids)
 
     def watch_products_all_label(self):
         self.ensure_one()
