@@ -16,28 +16,33 @@
             <field name="model">product.watch_products</field>
             <field name="arch" type="xml">
                 <form string="watch products">
-                    <group>
-                        <field name="name"/>
-                        <field name="report_id" domain="[('model', '=', 'product.template')]"/>
-                        <field name="product_ids">
-                            <tree>
-                                <field name="default_code"/>
-                                <field name="name"/>
-                                <field name="write_date"/>
-                            </tree>
-                        </field>
-                        <field name="last_print"/>
-                        <field name="active"/>
-                    </group>
-                    <footer>
-                        <button class="oe_highlight" name="watch_products_label" string="Imprimir cambios desde la ultima impresion" type="object"/>
-                        <button class="oe_highlight" name="watch_products_all_label" string="Imprimir todos" type="object"/>
-                        <button special="cancel" string="Cancel"/>
-                    </footer>
-                    <div class="oe_chatter">
-                        <field name="message_follower_ids" widget="mail_followers"/>
-                        <field name="message_ids" widget="mail_thread"/>
-                    </div>
+                    <header>
+                        <button name="open_bulk_code" string="Scanner" type="object"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field domain="[('model', '=', 'product.template')]" name="report_id"/>
+                            <field name="product_ids">
+                                <tree>
+                                    <field name="default_code"/>
+                                    <field name="name"/>
+                                    <field name="write_date"/>
+                                </tree>
+                            </field>
+                            <field name="last_print"/>
+                            <field name="active"/>
+                        </group>
+                        <footer>
+                            <button class="oe_highlight" name="watch_products_label" string="Imprimir cambios desde la ultima impresion" type="object"/>
+                            <button class="oe_highlight" name="watch_products_all_label" string="Imprimir todos" type="object"/>
+                            <button special="cancel" string="Cancel"/>
+                        </footer>
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids" widget="mail_followers"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
+                    </sheet>
                 </form>
             </field>
         </record>
@@ -49,7 +54,6 @@
                     <field name="name"/>
                     <field name="team_id"/>
                     <field name="report_id"/>
-
                 </search>
             </field>
         </record>
@@ -60,5 +64,24 @@
             <field name="view_id" ref="view_product_watch_products_tree"/>
         </record>
         <menuitem action="action_product_watch_products" id="menu_product_watch_products_partner" parent="stock.menu_stock_inventory_control" sequence="20"/>
+        <record id="bulk_codes_form" model="ir.ui.view">
+            <field name="name">bulk_codes.form</field>
+            <field name="model">product.watch_products</field>
+            <field name="priority">60</field>
+            <field name="arch" type="xml">
+                <form string="description">
+                    <sheet>
+                        <group>
+                            <span>
+                                <field name="bulk_codes"/>
+                            </span>
+                        </group>
+                        <group>
+                            <button name="process_bulk_codes" string="process" type="object"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
     </data>
 </openerp>

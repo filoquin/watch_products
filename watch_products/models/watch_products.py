@@ -37,6 +37,35 @@ class ProductWatchProducts(models.Model):
         'product.template',
         string='Product',
     )
+    bulk_codes = fields.Text(
+        string='bulk codes',
+    )
+
+    def open_bulk_code(self):
+        view = self.env.ref('watch_products.bulk_codes_form')
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Bulk scan',
+            'view_mode': 'from',
+            'res_model': 'product.watch_products',
+            'res_id': self.id,
+            'target': 'new',
+            'domain': [],
+            "view_id": view.id,
+            "views": [(view.id, "form")],
+        }
+
+    def process_bulk_codes(self):
+        self.ensure_one()
+
+        if self.bulk_codes:
+            codes = self.bulk_codes.splitlines()
+            product_ids = self.env['product.template'].search(
+                [('barcode', 'in', codes)])
+            new_products_ids = product_ids - self.product_ids
+            self.product_ids = [(4, x.id) for x in new_products_ids]
+            self.bulk_codes = ''
+            return self.report_id.report_action(new_products_ids)
 
     def watch_products_all_label(self):
         self.ensure_one()
@@ -48,8 +77,8 @@ class ProductWatchProducts(models.Model):
             return self.report_id.report_action(self.product_ids)
 
     def watch_products_label(self):
-        # product_watch_products_obj = self.pool.get('product.watch.products')
         self.ensure_one()
+
         product_ids = self.env['product.template']
         changes = []
 
