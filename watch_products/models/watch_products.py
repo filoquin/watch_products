@@ -40,6 +40,11 @@ class ProductWatchProducts(models.Model):
     bulk_codes = fields.Text(
         string='bulk codes',
     )
+    count_by_product = fields.Integer(
+        string='count',
+        default=1
+    )
+
 
     def open_bulk_code(self):
         view = self.env.ref('watch_products.bulk_codes_form')
@@ -67,7 +72,11 @@ class ProductWatchProducts(models.Model):
 
                 self.product_ids = [(4, x.id) for x in new_products_ids]
                 self.bulk_codes = ''
-                return self.report_id.report_action(new_products_ids)
+                product_ids = []
+                for product_id in new_products_ids:
+                    product_ids += [product_id.id for x in range(0, self.count_by_product)]
+
+                return self.report_id.report_action(product_ids)
             self.bulk_codes = ''
 
     def watch_products_all_label(self):
@@ -77,7 +86,10 @@ class ProductWatchProducts(models.Model):
         if len(self.product_ids):
             self.message_post(
                 body='Se genero un pdf con todos los articulos de la lista y se actualizo la fecha de impresion')
-            return self.report_id.report_action(self.product_ids)
+            product_ids = []
+            for product_id in self.product_ids:
+                product_ids += [product_id.id for x in range(0, self.count_by_product)]
+            return self.report_id.report_action(product_ids)
 
     def watch_products_label(self):
         self.ensure_one()
@@ -100,10 +112,13 @@ class ProductWatchProducts(models.Model):
                     product_ids += item
 
         if len(product_ids):
+            print_product_ids = []
+            for product_id in product_ids:
+                print_product_ids += [product_id.id for x in range(0, self.count_by_product)]
 
             self.last_print = fields.Datetime.now()
             self.message_post(
                 body='Se genero un pdf con %s y se actualizo la fecha de impresion' % '|'.join(changes))
-            return self.report_id.report_action(product_ids)
+            return self.report_id.report_action(print_product_ids)
         else:
             self.message_post(body='Sin nada que imprimir')

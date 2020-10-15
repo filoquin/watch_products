@@ -19,4 +19,8 @@
     <record id="report_label_65x40" model="ir.actions.report">
         <field name="paperformat_id" ref="paperformat_a4label"/>
     </record>
+    <report id="report_label_watch_product_half" model="product.template" name="watch_products.report_label_watch_product_half" report_type="qweb-pdf" string="Etiqueta 1/2 pagina"/>
+    <record id="report_label_watch_product_half" model="ir.actions.report">
+        <field name="paperformat_id" ref="paperformat_a4label"/>
+    </record>
 </odoo>

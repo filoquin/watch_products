@@ -23,6 +23,7 @@
                         <group>
                             <field name="name"/>
                             <field domain="[('model', '=', 'product.template')]" name="report_id"/>
+                            <field name="count_by_product"/>
                             <field name="product_ids">
                                 <tree>
                                     <field name="default_code"/>
