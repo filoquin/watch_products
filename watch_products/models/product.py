@@ -12,6 +12,9 @@ class ProductTemplate(models.Model):
         digits='Product Price'
     )
 
+    """modelo_articulo = fields.Char(
+        string='Filed Label',
+    )"""
     def _add_price_history(self):
         ''' Store the standard price change in order to be able to retrieve the list_price of a product template for a given date'''
         vals_list = []

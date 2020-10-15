@@ -15,7 +15,7 @@ class ProductWatchProducts(models.Model):
         required=True,
     )
     team_id = fields.Many2one(
-        'crm_team',
+        'crm.team',
         string='Team',
     )
 
